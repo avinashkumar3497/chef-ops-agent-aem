@@ -8,18 +8,19 @@ default_action :create
 # property :role, String, required: true
 # property :server, String, required: true
 
-# ── 1. Add Google's apt repository ───────────────────────────────────────
-# this section needs to be removed in actual execution
-apt_repository 'google-cloud-ops-agent' do
-  uri          'https://packages.cloud.google.com/apt'
-  distribution 'google-cloud-ops-agent-noble-all'
-  components   ['main']
-  key          'https://packages.cloud.google.com/apt/doc/apt-key.gpg'
-  action       :add
-end
-
 action :create do
-    package 'google-cloud-ops-agent' do
+  
+  # ── 1. Add Google's apt repository ───────────────────────────────────────
+  # this section needs to be removed in actual execution
+  apt_repository 'google-cloud-ops-agent' do
+    uri          'https://packages.cloud.google.com/apt'
+    distribution 'google-cloud-ops-agent-noble-all'
+    components   ['main']
+    key          'https://packages.cloud.google.com/apt/doc/apt-key.gpg'
+    action       :add
+  end
+  
+  package 'google-cloud-ops-agent' do
     action :install
   end
 
