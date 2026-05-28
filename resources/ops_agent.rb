@@ -36,7 +36,7 @@ action :create do
   end
 
   template '/etc/google-cloud-ops-agent/config.yaml' do
-    source 'ops_agent_config.yaml.erb'
+    source 'ops_agent_config.erb'
     cookbook 'gcp-monitoring-v1'
     owner  'root'
     group  'root'
