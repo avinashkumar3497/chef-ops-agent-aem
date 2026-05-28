@@ -1,0 +1,17 @@
+logging:
+  receivers:
+    IHP-3359-testing:
+      type: files
+      include_paths:
+#         - /var/log/aem/access.log
+#-------replace with correct path--------------
+        - /aem/author/crx-quickstart/logs/access.log
+#----------------------------------------------
+  exporters:
+    google_cloud_logging:
+      type: google_cloud_logging
+  service:
+    pipelines:
+      aem_pipeline:
+        receivers: [IHP-3359-testing]
+        exporters: [google_cloud_logging]

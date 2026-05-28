@@ -35,27 +35,20 @@ action :create do
     action :create
   end
 
-  file '/etc/google-cloud-ops-agent/config.yaml' do
-    owner   'root'
-    group   'root'
-    mode    '0644'
-    content <<~YAML
-      logging:
-        receivers:
-          IHP-3359-testing:
-            type: files
-            include_paths:
-              - /var/log/aem/access.log
-        exporters:
-          google_cloud_logging:
-            type: google_cloud_logging
-        service:
-          pipelines:
-            aem_pipeline:
-              receivers: [IHP-3359-testing]
-              exporters: [google_cloud_logging]
-    YAML
+  template '/etc/google-cloud-ops-agent/config.yaml' do
+    source 'ops_agent_config.yaml.erb'
+    cookbook 'gcp-monitoring-v1'
+    owner  'root'
+    group  'root'
+    mode   '0644'
+    variables(
+      environment: new_resource.environment,
+      platform: new_resource.platform,
+      role: new_resource.role,
+      server: new_resource.server
+    )
     action :create
+    # need to be moved to file section later
     notifies :restart, 'service[google-cloud-ops-agent]', :delayed
   end
 
