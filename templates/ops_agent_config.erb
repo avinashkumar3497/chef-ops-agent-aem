@@ -37,9 +37,9 @@ logging:
       type: parse_regex
       regex: '^(?<time>\d{2}/[A-Za-z]{3}/\d{4}:\d{2}:\d{2}:\d{2}) [^ ]* \[(?<reqid>\d{1,500})\] (?<message>.*)'
 
-#     severity_parser:
-#         type: parse_severity
-#         field: level
+    severity_parser:
+        type: parse_severity
+        field: level
 
   service:
     pipelines:
@@ -52,6 +52,7 @@ logging:
         processors:
             - multiline_parser
             - aem-error-parser
+            - severity_parser
 
       aem-request-pipeline:
         receivers: [aem-request]
