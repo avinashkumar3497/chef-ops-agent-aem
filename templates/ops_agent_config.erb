@@ -4,6 +4,7 @@ logging:
       type: files
       include_paths:
         - /aem/author/crx-quickstart/logs/access.log ################################################
+      record_log_file_path: true
 
 #     aem-error:
 #           type: files
@@ -14,11 +15,6 @@ logging:
     aem-access-parser:
       type: parse_regex
       regex: '^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) (?<time>\d{2}/[A-Za-z]{3}/\d{4}:\d{2}:\d{2}:\d{2}) [^ ]* "(?<method>\S+)(?: +(?<path>(?:[^\"]|\\.)*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>(?:[^\"]|\\.)*)" "(?<agent>(?:[^\"]|\\.)*)")?$'
-
-    time-parser:
-      type: parse_time
-      field: time
-      format: "%d/%b/%Y:%H:%M:%S"
 
 #     severity_parser:
 #         type: parse_severity
