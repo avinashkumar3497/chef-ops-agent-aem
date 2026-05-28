@@ -1,17 +1,31 @@
 logging:
   receivers:
-    IHP-3359-testing:
+    aem-access:
       type: files
       include_paths:
-#         - /var/log/aem/access.log
-#-------replace with correct path--------------
-        - /aem/author/crx-quickstart/logs/access.log
-#----------------------------------------------
-  exporters:
-    google_cloud_logging:
-      type: google_cloud_logging
+        - /aem/author/crx-quickstart/logs/access.log ################################################
+
+#     aem-error:
+#           type: files
+#           include_paths:
+#             - /aem/author/crx-quickstart/logs/error.log ################################################
+
+  processors:
+    aem-access-parser:
+      type: parse_regex
+      regex: '^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) (?<time>\d{2}/[A-Za-z]{3}/\d{4}:\d{2}:\d{2}:\d{2}) [^ ]* "(?<method>\S+)(?: +(?<path>(?:[^\"]|\\.)*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>(?:[^\"]|\\.)*)" "(?<agent>(?:[^\"]|\\.)*)")?$'
+
+    time-parser:
+      type: parse_time
+      field: time
+      format: "%d/%b/%Y:%H:%M:%S"
+
+#     severity_parser:
+#         type: parse_severity
+#         field: level
+
   service:
     pipelines:
       aem_pipeline:
-        receivers: [IHP-3359-testing]
-        exporters: [google_cloud_logging]
+        receivers: [aem-access]
+        processors: [aem-access-parser,time-parser]
