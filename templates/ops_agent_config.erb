@@ -23,13 +23,13 @@ logging:
       type: modify_fields
       fields:
         labels.environment:
-          static_value: demo_env
+          static_value: <%= @environment %>
         labels.platform:
-          static_value: demo_platform
+          static_value: <%= @platform %>
         labels.role:
-          static_value: demo_role
+          static_value: <%= @role %>
         labels.server:
-          static_value: demo_server
+          static_value: <%= @server %>
 
     aem-access-parser:
       type: parse_regex
