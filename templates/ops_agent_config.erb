@@ -19,6 +19,19 @@ logging:
       record_log_file_path: true
 
   processors:
+    add_labels:
+      type: modify_fields
+      fields:
+        labels.environment:
+          static_value: demo_env
+        labels.platform:
+          static_value: demo_platform
+        labels.role:
+          static_value: demo_role
+        labels.server:
+          static_value: demo_server
+
+
     aem-access-parser:
       type: parse_regex
       regex: '^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) (?<time>\d{2}/[A-Za-z]{3}/\d{4}:\d{2}:\d{2}:\d{2}) [^ ]* "(?<method>\S+)(?: +(?<path>(?:[^\"]|\\.)*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>(?:[^\"]|\\.)*)" "(?<agent>(?:[^\"]|\\.)*)")?$'
@@ -45,7 +58,9 @@ logging:
     pipelines:
       aem-access-pipeline:
         receivers: [aem-access]
-        processors: [aem-access-parser]
+        processors:
+            - aem-access-parser
+            - add_labels
 
       aem-error-pipeline:
         receivers: [aem-error]
@@ -53,7 +68,10 @@ logging:
             - multiline_parser
             - aem-error-parser
             - severity_parser
+            - add_labels
 
       aem-request-pipeline:
         receivers: [aem-request]
-        processors: [aem-request-parser]
+        processors:
+            - aem-request-parser
+            - add_labels
